@@ -58,7 +58,25 @@ public class SimplexAlgorithm {
         return pr;
     }
     
-    public boolean checkCanonical(){
+    /**
+     * check if b1 to bi > 0
+     * @return boolean
+    */
+    public boolean checkB(){
+        boolean ok = true;
+        for(int i = 1; i < row; i++){
+            if(matrix[i][0] < 0){
+                ok = false;
+            }
+        }
+        return ok;
+    }
+    
+    /**
+     * check if c1 to ci > 0
+     * @return boolean
+    */
+    public boolean checkC(){
         boolean ok = true;
         for(int i = 1; i < col; i++){
             if(matrix[0][i] < 0){
@@ -84,11 +102,11 @@ public class SimplexAlgorithm {
         int pr = getPivotRow();
         System.out.println("pivot at: " + pr + ", " + pc);
         float divideBy = matrix[pr][pc];
-        System.out.println("R" + pr + " / " + divideBy);
+        System.out.println("R" + pr + " / " + roundOff(divideBy));
         for(int i = 0; i < col; i++){
             matrix[pr][i] /= divideBy;
         }
-        printTable();
+        printTableau();
         for(int i = 0; i < row; i++){
             if(i == pr){
                 continue;
@@ -101,15 +119,16 @@ public class SimplexAlgorithm {
             if(matrix[i][pc] == -1f){
                 makeZeroBy = 1f;
             }
-            System.out.println("R" + i + " + R" + pr + " * " + makeZeroBy);
+            System.out.println("R" + i + " + R" + pr + " * " + roundOff(makeZeroBy));
             for(int j = 0; j < col; j++){                
                 matrix[i][j] += matrix[pr][j] * makeZeroBy;                
             }
-            printTable();
+            printTableau();
         }
     }
     
     public void printX(){
+        System.out.println("xz: " + roundOff(matrix[0][0]));
         for(int i = 1; i < col; i++){
             float x = 0;
             if(checkIdentityColumn(i)){
@@ -119,7 +138,7 @@ public class SimplexAlgorithm {
                     }
                 }
             }
-            System.out.println("x" + i + ": " + Math.round(x * 100.0) / 100.0 + "\t");
+            System.out.println("x" + i + ": " + roundOff(x));
         }
     }
     
@@ -136,15 +155,18 @@ public class SimplexAlgorithm {
         return (counter1 == 1 && counter0 == row - 1);
     }
     
-    public void printTable(){
+    public void printTableau(){
         for(int i = 0; i < row; i++){
             for(int j = 0; j < col; j++){
-                System.out.print(Math.round(matrix[i][j] * 100.0) / 100.0 + "\t");
+                System.out.print(roundOff(matrix[i][j]) + "\t");
             }
             System.out.println();
         }
         System.out.println();
     }
     
+    float roundOff(float f){        
+        return (float) (Math.round(f * 100.0) / 100.0);
+    }
     
 }

@@ -36,11 +36,14 @@ public class Main {
         };
         SimplexAlgorithm sa = new SimplexAlgorithm(m2.length, m2[0].length);
         sa.setMatrix(m2);
-        while(!sa.checkCanonical()){
-            sa.printTable();
+        while(!sa.checkC()){
+            sa.printTableau();
             sa.makeIdentityColumn();
+        }        
+        System.out.println((sa.checkB()) ? "Feasible" : "Infeasible");
+        if(sa.checkB()){
+            sa.printX();            
         }
-        sa.printX();
     }
     
     
